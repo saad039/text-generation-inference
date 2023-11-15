@@ -34,7 +34,7 @@ TEMP_DQ = None
 
 def set_device(device):
     global DEVICE
-    DEVICE = device
+    DEVICE = torch.device('cuda:0')
 
 
 def create_exllama_buffers():
