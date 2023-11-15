@@ -20,7 +20,7 @@ install-torch:
 	# Install specific version of torch
 	pip install torch --extra-index-url https://download.pytorch.org/whl/cu118 --no-cache-dir
 
-install: gen-server install-torch
+install: gen-server 
 	pip install pip --upgrade
 	pip install -r requirements.txt
 	pip install -e ".[bnb, accelerate]"

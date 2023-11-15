@@ -474,7 +474,7 @@ class CausalLMBatch(Batch):
     def __len__(self):
         return len(self.requests)
 
-
+from transformers import AutoConfig
 class CausalLM(Model):
     def __init__(
         self,
@@ -501,13 +501,16 @@ class CausalLM(Model):
             truncation_side="left",
             trust_remote_code=trust_remote_code,
         )
+        config = AutoConfig.from_pretrained(model_id)
+        config.quantization_config["disable_exllama"] = False
+        config.quantization_config["exllama_config"] = {"version":2}
+        print(f'Model Config: {config}')
         model = AutoModelForCausalLM.from_pretrained(
             model_id,
             revision=revision,
             torch_dtype=dtype,
-            device_map="auto"
-            if torch.cuda.is_available() and torch.cuda.device_count() > 1
-            else None,
+            device_map="auto",
+	    config=config,
             load_in_8bit=quantize == "bitsandbytes",
             trust_remote_code=trust_remote_code,
         )
